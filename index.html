@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ink Board: two fingers, one board</title>
+<meta name="description" content="A minimal ink-drawn fingerboard game. Your phone is the ground: push with one finger, pop, flip and grind with two.">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ink Board">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ink Board">
+<meta property="og:title" content="Ink Board">
+<meta property="og:description" content="Two fingers. One board. Push, ollie, flip and grind.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,900&family=Figtree:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fff;--ink:#000;--soft:#5c5c5c;--display:"Fraunces",Georgia,serif;--ui:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light;box-sizing:border-box}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#fff;--ink:#000;--soft:#5c5c5c}}
+:root[data-theme="dark"]{--paper:#fff;--ink:#000;--soft:#5c5c5c}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0;min-height:100%;background:var(--paper);color:var(--ink);font-family:var(--ui)}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+main{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:grid;place-items:end center;align-content:end;padding:24px 16px calc(env(safe-area-inset-bottom,0px) + 18px)}
+@media (min-aspect-ratio:1/1){main{place-items:center end;align-content:center;padding-right:6vw}}
+.card{width:min(420px,100%);background:var(--paper);border:2.5px solid var(--ink);border-radius:26px;box-shadow:7px 8px 0 var(--ink);padding:28px 24px 22px;text-align:center;
+  animation:in .8s cubic-bezier(.3,.7,.3,1) both .2s}
+@keyframes in{0%{opacity:0;transform:translateY(60px) scale(.8,1.2)}55%{opacity:1;transform:translateY(-8px) scale(1.04,.96)}78%{transform:translateY(2px) scale(.99,1.01)}100%{transform:none}}
+h1{font-family:var(--display);font-style:italic;font-weight:900;font-size:clamp(50px,14vw,74px);line-height:.95;margin:0;letter-spacing:-.01em}
+.tag{font-weight:800;font-size:17px;margin:12px 0 22px}
+.play{display:block;width:100%;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:18px;padding:17px 20px;font-family:var(--display);font-style:italic;font-weight:900;font-size:30px;
+  border:2.5px solid var(--ink);transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
+.play:hover{transform:translateY(-2px)}
+.play:active{transform:scale(1.04,.9)}
+.play:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+.feats{list-style:none;padding:0;margin:20px 0 4px;display:grid;gap:10px;text-align:left}
+.feats li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;font-weight:600;font-size:14.5px;line-height:1.35}
+.feats svg{width:30px;height:30px}
+.feats b{font-weight:800}
+footer{margin-top:12px;font-size:12px;font-weight:600;color:var(--soft)}
+@media (prefers-reduced-motion:reduce){.card{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+<main>
+  <div class="card">
+    <h1>Ink Board</h1>
+    <p class="tag">Two fingers. One board.</p>
+    <a class="play" href="/play/">Play</a>
+    <ul class="feats">
+      <li><svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="#000" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="4" width="12" height="32" rx="6" fill="#000"/><path d="M33 10v18M29 24l4 5 4-5"/></g></svg><span><b>Your phone is the ground.</b> One finger holds the board, the other kicks off to push.</span></li>
+      <li><svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="#000" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30c6-2 18-2 24 0"/><path d="M12 22c2-8 14-8 16 0"/><path d="M20 4v8M16 8l4-4 4 4"/></g></svg><span><b>Ollie, kickflip, shove-it.</b> Slide to the nose, flick off the side, catch it.</span></li>
+      <li><svg viewBox="0 0 40 40" aria-hidden="true"><g stroke="#000" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 26h28" fill="none"/><path d="M10 26v8M30 26v8" fill="none"/><path d="M14 20l4-4 4 4 4-4" fill="none"/></g></svg><span><b>Ninety seconds.</b> Grind rails, clear cones and chain it all into one big combo.</span></li>
+    </ul>
+  </div>
+  <footer>Best on a phone, held upright.</footer>
+</main>
+<script>
+if('serviceWorker' in navigator&&location.protocol==='https:') navigator.serviceWorker.register('/sw.js').catch(()=>{});
+/* ---------- a fingerboard rolling up the pavement behind the card, kickflipping now and then ---------- */
+(()=>{
+  const cv=document.getElementById('c'), ctx=cv.getContext('2d'), TAU=Math.PI*2;
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W=0,H=0,D=1;
+  function resize(){ D=Math.min(2,devicePixelRatio||1); W=innerWidth; H=innerHeight; cv.width=W*D; cv.height=H*D; }
+  addEventListener('resize',resize); resize();
+  let s=7; const r=()=>{ s=(s*16807)%2147483647; return (s-1)/2147483646; };
+  const grit=[]; for(let i=0;i<60;i++) grit.push([r(),r(),.6+r()*1.2]);
+  const t0=performance.now();
+  function deck(){ ctx.beginPath(); ctx.moveTo(-14,-36); ctx.arc(0,-36,14,Math.PI,0); ctx.lineTo(14,36); ctx.arc(0,36,14,0,Math.PI); ctx.closePath(); }
+  function frame(now){
+    const t=still?1.2:(now-t0)/1000;
+    ctx.setTransform(D,0,0,D,0,0); ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
+    const land=H>W, u=Math.min(W,H)/100*(land?.46:.5), bx=land?W/2:W*.3, by=land?H*.22:H/2, slab=u*50, off=(t*u*70)%slab;
+    ctx.strokeStyle='#000'; ctx.globalAlpha=.25; ctx.lineWidth=1.2; ctx.beginPath();
+    for(let y=-slab+off;y<H+slab;y+=slab){ ctx.moveTo(0,y); ctx.lineTo(W,y); }
+    for(let x=bx%slab;x<W;x+=slab){ ctx.moveTo(x,0); ctx.lineTo(x,H); } ctx.stroke();
+    ctx.fillStyle='#000'; ctx.globalAlpha=.3; grit.forEach(([gx,gy,z])=>{ const y=(gy*H+t*u*70)%H; ctx.fillRect(gx*W,y,z,z); }); ctx.globalAlpha=1;
+    // every 2.6 s: pop, one full flip, land
+    const c=t%2.6, air=c>1.6&&c<2.5?(c-1.6)/.9:0, z=4*air*(1-air), flip=air?Math.cos(air*TAU):1, sc=u*(1+.16*z);
+    ctx.save(); ctx.translate(bx+z*u*5,by+z*u*7); ctx.scale(sc,sc); ctx.scale(Math.max(.09,Math.abs(flip)),1); deck(); ctx.fillStyle='rgba(0,0,0,.15)'; ctx.fill(); ctx.restore();
+    ctx.save(); ctx.translate(bx,by); ctx.scale(sc,sc); ctx.scale(Math.max(.09,Math.abs(flip)),1); deck();
+    if(flip>=0){ ctx.fillStyle='#000'; ctx.fill(); ctx.fillStyle='#fff'; [-1,1].forEach(e=>[[-3,-3],[3,-3],[-3,3],[3,3]].forEach(([a,b])=>{ ctx.beginPath(); ctx.arc(a,e*28+b,1,0,TAU); ctx.fill(); }));
+      ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(-12,-43); ctx.bezierCurveTo(-5,-47,4,-39,12,-43); ctx.stroke(); }
+    else { ctx.fillStyle='#fff'; ctx.fill(); ctx.lineWidth=1.4; ctx.strokeStyle='#000'; ctx.stroke(); ctx.fillStyle='#000'; [-28,28].forEach(T=>{ ctx.fillRect(-5,T-4.5,10,9); ctx.fillRect(-12.5,T-1.6,25,3.2); }); }
+    ctx.restore();
+    if(!still) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

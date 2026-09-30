@@ -1,0 +1,111 @@
+/* Ink Board styles. Paper-and-ink look: white paper, black ink, no other colors. Shared with the other Ink games. */
+:root{
+  --paper:#ffffff; --ink:#000000; --soft:#5c5c5c;
+  --display:"Fraunces", Georgia, "Times New Roman", serif;
+  --ui:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+  box-sizing:border-box;
+}
+/* The street is paper-and-ink by design, so it stays white in either viewer theme. */
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --paper:#ffffff; --ink:#000000; --soft:#5c5c5c; } }
+:root[data-theme="dark"]{ --paper:#ffffff; --ink:#000000; --soft:#5c5c5c; }
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0;background:var(--paper);color:var(--ink);overflow:hidden;overscroll-behavior:none;
+  -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;font-family:var(--ui)}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+[hidden]{display:none !important}
+
+/* ---------- HUD ---------- */
+#hud{position:fixed;top:0;left:0;right:0;z-index:5;pointer-events:none;
+  padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 18px;background:linear-gradient(to bottom,#fff 60%,rgba(255,255,255,0));
+  display:grid;grid-template-columns:1fr auto;align-items:start;gap:4px 8px}
+.pv{font-family:var(--display);font-weight:800;font-size:30px;line-height:1;font-variant-numeric:tabular-nums;text-shadow:0 0 3px #fff,0 0 6px #fff}
+.sub{font-size:13px;font-weight:700;color:var(--soft);margin-top:4px;line-height:1.25}
+.tm{text-align:right;margin-right:50px}
+#time.low{animation:tick 1s ease-in-out infinite}
+@keyframes tick{0%,100%{transform:none}12%{transform:scale(1.18,.86)}26%{transform:scale(.95,1.06)}40%{transform:none}}
+#pause{position:fixed;right:12px;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:6;width:40px;height:40px;border-radius:50%;
+  border:2.5px solid var(--ink);background:var(--paper);color:var(--ink);box-shadow:3px 4px 0 var(--ink);display:grid;place-items:center;cursor:pointer;padding:0;
+  transition:transform .28s cubic-bezier(.34,1.56,.64,1)}
+#pause svg{width:22px;height:22px}
+#pause:active{transform:scale(1.12,.86)}
+#pause:focus-visible{outline:3px solid var(--ink);outline-offset:4px}
+
+/* the trick line: names, then points × tricks */
+#combo{position:fixed;left:16px;right:16px;top:calc(env(safe-area-inset-top,0px) + 86px);z-index:5;text-align:center;pointer-events:none;opacity:0}
+#combo b{display:block;font-family:var(--display);font-style:italic;font-weight:900;font-size:clamp(24px,7.4vw,34px);line-height:1.05;
+  text-shadow:2px 3px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff}
+#combo span{display:inline-block;margin-top:6px;font-size:16px;font-weight:800;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:4px 14px;font-variant-numeric:tabular-nums}
+#combo span:empty{display:none}
+#combo small{display:block;margin-top:5px;font-size:13px;font-weight:800;color:var(--ink);text-shadow:0 0 3px #fff,0 0 6px #fff}
+#combo.on{opacity:1}
+#combo.pop b{animation:trick .42s cubic-bezier(.3,.7,.3,1)}
+@keyframes trick{0%{transform:scale(.5,1.4);opacity:0}55%{transform:scale(1.12,.9);opacity:1}78%{transform:scale(.97,1.03)}100%{transform:none}}
+#combo.bank{animation:bank 1.2s cubic-bezier(.3,.7,.3,1) forwards}
+#combo.bank span{background:var(--ink);color:var(--paper);font-size:20px}
+@keyframes bank{0%{opacity:1;transform:none}14%{transform:scale(1.14,.86)}28%{transform:scale(.96,1.05)}40%{transform:none}70%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-60px) scale(.9,1.15)}}
+#combo.bail{animation:bail 1.2s linear forwards}
+#combo.bail b{display:inline-block;background:var(--ink);color:var(--paper);text-shadow:none;border-radius:14px;padding:4px 14px 6px}
+@keyframes bail{0%{opacity:0;transform:scale(.4) rotate(-8deg)}12%{opacity:1;transform:scale(1.2,.85) rotate(3deg)}24%{transform:scale(.95,1.05) rotate(-1deg)}34%{transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(12px)}}
+
+#hint{position:fixed;left:16px;right:16px;z-index:6;text-align:center;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);font-size:15px;font-weight:700;
+  display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
+#hint span{background:var(--paper);border:2px solid var(--ink);border-radius:18px;padding:9px 16px;display:inline-block;max-width:420px;line-height:1.35;box-shadow:3px 4px 0 var(--ink);animation:bob 2.4s ease-in-out infinite}
+#skip{pointer-events:auto;appearance:none;border:0;background:none;color:var(--soft);font:800 13px var(--ui);padding:6px 12px;cursor:pointer;text-decoration:underline}
+#skip:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+#callout{position:fixed;left:0;right:0;top:34%;z-index:6;text-align:center;pointer-events:none;opacity:0}
+#callout b{display:block;font-family:var(--display);font-style:italic;font-weight:900;font-size:clamp(48px,15vw,88px);line-height:1;
+  text-shadow:3px 4px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff}
+#callout span{display:inline-block;margin-top:8px;font-size:15px;font-weight:800;background:var(--paper);border:2px solid var(--ink);border-radius:999px;padding:5px 14px}
+#callout.go{animation:call 1.4s linear forwards}
+@keyframes call{
+  0%{opacity:0;transform:scale(.2,.2)}
+  10%{opacity:1;transform:scale(1.28,.78)}
+  18%{transform:scale(.88,1.16)}
+  26%{transform:scale(1.05,.96)}
+  34%{transform:scale(1)}
+  78%{opacity:1;transform:translateY(0) scale(1)}
+  85%{transform:translateY(6px) scale(1.1,.9)}
+  100%{opacity:0;transform:translateY(-90px) scale(.8,1.3)}}
+
+/* ---------- cards ---------- */
+#card{position:fixed;inset:0;z-index:8;display:grid;overflow-y:auto;-webkit-overflow-scrolling:touch;background:rgba(255,255,255,.72);padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px)}
+#card .panel{margin:auto}
+#card.home{background:rgba(255,255,255,.55)}
+.panel{background:var(--paper);border:2.5px solid var(--ink);border-radius:24px;box-shadow:7px 8px 0 var(--ink);
+  padding:22px 18px 18px;width:min(420px,100%);text-align:center;animation:cardIn .6s cubic-bezier(.3,.7,.3,1)}
+@keyframes cardIn{0%{transform:translateY(60vh) scale(.7,1.3)}55%{transform:translateY(-10px) scale(1.06,.94)}75%{transform:translateY(3px) scale(.98,1.02)}100%{transform:none}}
+.panel h2{font-family:var(--display);font-weight:900;font-style:italic;font-size:34px;line-height:1.05;margin:0}
+.panel p{margin:6px 0 16px;font-weight:700;color:var(--soft)}
+.logo{font-size:52px !important;margin-bottom:2px !important}
+.bestline{font-weight:800;font-size:14px;margin:-6px 0 14px}
+.bestline b{font-family:var(--display);font-weight:900;font-size:20px;font-variant-numeric:tabular-nums}
+.big{font-family:var(--display);font-weight:900;font-size:56px;line-height:1;margin:8px 0 2px;font-variant-numeric:tabular-nums}
+.nxt{color:var(--ink) !important;font-size:14px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 10px}
+.stats div{border:2px solid var(--ink);border-radius:14px;padding:8px 6px}
+.stats b{display:block;font-family:var(--display);font-weight:900;font-size:26px;line-height:1.1;font-variant-numeric:tabular-nums}
+.stats small{font-size:12px;font-weight:800;color:var(--soft)}
+.cname{font-family:var(--display);font-style:italic;font-weight:900 !important;color:var(--ink) !important;font-size:17px;line-height:1.25;margin:0 0 16px !important}
+.btn{appearance:none;border:2.5px solid var(--ink);background:var(--ink);color:var(--paper);border-radius:14px;padding:13px 22px;
+  font-family:var(--ui);font-weight:800;font-size:16px;cursor:pointer;width:100%;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+.btn:first-of-type{font-family:var(--display);font-style:italic;font-weight:900;font-size:26px;padding:12px 22px}
+.btn:active{transform:scale(1.04,.9)}
+.btn.ghost{background:var(--paper);color:var(--ink);margin-top:8px;font-family:var(--ui);font-style:normal;font-weight:800;font-size:16px}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.how{text-align:left;font-size:13px;font-weight:600;border:1.5px dashed var(--ink);border-radius:12px;padding:10px 12px;margin:14px 0 14px;line-height:1.4;display:grid;gap:5px}
+.how b{font-weight:800;margin-right:4px}
+.fbc{appearance:none;border:2px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:999px;padding:7px 14px;font:800 13px var(--ui);cursor:pointer}
+.fbc.on{background:var(--ink);color:var(--paper)}
+.fbc:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.ver{font-size:11.5px !important;font-weight:700 !important;color:var(--soft) !important;margin:12px 0 0 !important}
+
+@media (prefers-reduced-motion: reduce){
+  #hint span,#time.low{animation:none}
+  .panel,#combo.pop b{animation:none}
+  #combo.bank,#combo.bail,#callout.go{animation:still 1.2s steps(1,end) forwards}
+}
+@keyframes still{0%{opacity:1;transform:none}100%{opacity:0}
+}
