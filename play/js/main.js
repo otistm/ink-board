@@ -6,7 +6,7 @@ function startRun(lesson){
     leanIn:0,leanS:0,score:0,time:SESSION,live:false,over:false,combo:null,comboIdle:0,tricks:0,bestCombo:{pts:0,name:''},
     shake:0,marks:[],sparks:[],rings:[],tut:-1,turned:0,cellF:'',cellB:''});
   hudShow(true); lastHud=''; $('skip').hidden=true;
-  if(lesson) tutStart(); else hint('Push to start the clock');
+  if(lesson) tutStart(); else hint('Two fingers on the board to roll');
 }
 function endRun(){
   S.over=true; S.mode='done'; PT.clear(); hint(null);

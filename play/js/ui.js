@@ -10,7 +10,7 @@ function updHUD(){
   if(txt===lastHud) return; lastHud=txt;
   $('score').textContent=fmtN(S.score); $('time').textContent=t;
   $('time').classList.toggle('low',S.live&&S.time<=10);
-  $('tsub').textContent=S.live?'left':S.tut>=0?'Learning':'Push to start';
+  $('tsub').textContent=S.live?'left':S.tut>=0?'Learning':'Roll to start';
   $('bestL').textContent=BEST.score?'Best '+fmtN(BEST.score):'No best yet';
 }
 function callout(big,small){
@@ -40,8 +40,7 @@ function comboBail(why){ $('comboN').textContent=why; $('comboP').textContent=''
 
 /* ---------- the first-time lesson ---------- */
 const TUT=[
-  {t:'Rest your pointer finger on the board', ev:'touch'},
-  {t:'Keep it there. Put your middle finger on the ground beside the board and swipe down to push', ev:'push'},
+  {t:'Put your pointer and middle fingers on the board to roll', ev:'roll'},
   {t:'Steer: slide your pointer finger a little left or right', ev:'steer'},
   {t:'Ollie: middle finger on the tail, then slide your pointer finger up to the nose, fast', ev:'ollie'},
   {t:'Kickflip: slide up and flick off the right side. Flick left for a heelflip', ev:'flip'},
@@ -70,7 +69,7 @@ function homeCard(){
     <button class="btn" id="go">Skate</button>
     ${META.tut?'<button class="btn ghost" id="how">Show me how again</button>':''}
     <div class="how">
-      <div><b>Push</b> Pointer finger on the board, middle finger swipes down the ground.</div>
+      <div><b>Roll</b> Two fingers on the board and it rolls. Swipe one down the ground to push faster.</div>
       <div><b>Ollie</b> Middle finger on the tail, slide your pointer finger to the nose.</div>
       <div><b>Flip</b> Slide up and flick off the side. Catch it before it lands.</div>
     </div>

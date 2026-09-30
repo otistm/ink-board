@@ -13,6 +13,7 @@ function hash(a,b){ let h=(a|0)*374761393+(b|0)*668265263; h=(h^(h>>>13))*127412
    The world is measured in board units: the deck is 100 long and 28 wide, like a fingerboard.
    Everything else (cones, twigs, rails, pavement slabs) is at fingerboard scale too. */
 const B={len:100, wid:28, truck:28, half:14, vmax:140};
+const CRUISE=95;     // how fast the board rolls by itself with two fingers on it (a push can go faster, up to B.vmax)
 const STREET=100;   // the pavement runs from -100 to 100 across; a kerb and grass lie beyond
 const SLAB=50;      // pavement slab size
 const CHUNK=300;    // the street is made in chunks this long

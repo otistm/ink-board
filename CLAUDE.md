@@ -31,7 +31,8 @@ Otis is the designer. He doesn't read code. He judges changes by playing them on
 ## How it skates
 Arcade, not a simulation. The world is measured in board units: the deck is 100 long and 28 wide.
 - A finger that lands on the board holds it. A finger that lands on the ground is a foot.
-- **Push**: with a finger on the board, swipe a ground finger down. The board speeds up toward about 60% of the finger's speed, up to `B.vmax`. A ground finger held still for a moment brakes. Pushing without a finger on the board does nothing (a callout says so).
+- **Roll**: two fingers on the board and it rolls forward by itself, easing up to `CRUISE`. Lift a finger and it coasts.
+- **Push** (optional, for extra speed): with a finger on the board, swipe a ground finger down. The board speeds up toward about 60% of the finger's speed, up to `B.vmax`. A ground finger held still for a moment brakes. Pushing without a finger on the board does nothing (a callout says so).
 - **Steer**: slide a board finger sideways from where it landed. Turning needs a little speed.
 - **Ollie**: two fingers on the board; the front one (nearest the top) slides at least 20 units toward the nose within a quarter second while the other is behind it. Air time grows with speed (`airTime`), so clearing things needs speed.
 - **Flip and spin**: in the first half of the air, the front finger moving 12 units sideways flips the board (right is a kickflip, left a heelflip; 38 units is a double). The back finger moving sideways does a shove-it (34 units is a 360).
@@ -41,7 +42,7 @@ Arcade, not a simulation. The world is measured in board units: the deck is 100 
 - **Kickers**: roll up one the right way for a big launch; flick a trick in the air off it. Going up the wrong way is a bail.
 - **Kerb**: the pavement is 200 wide. The kerb bounces you back.
 - **Combos**: each trick adds points; a combo is banked after a second of rolling without a trick and is worth its points times the number of tricks. The same trick again in one combo is worth half each time.
-- The session clock starts on your first push (or when the lesson ends). When it runs out, the board finishes its trick or grind first.
+- The session clock starts when you first get rolling (or when the lesson ends). When it runs out, the board finishes its trick or grind first.
 
 ## Every change
 1. Work on a new branch, never directly on `main`.
@@ -63,8 +64,8 @@ Progress is kept in the browser's localStorage. An update must never wipe or bre
 - Writing: sentence case, short and plain, no jargon beyond trick names.
 
 ## Smoke test
-- First launch: the home card shows Skate. Skate starts the lesson: rest a finger, push, steer, ollie, kickflip, catch. Skip ends it. Then "Go!" and the clock runs.
-- Pushing with a finger on the board speeds the board up and the pavement slides down; the wheels clack over slab joints.
+- First launch: the home card shows Skate. Skate starts the lesson: two fingers to roll, steer, ollie, kickflip, catch. Skip ends it. Then "Go!" and the clock runs.
+- Two fingers on the board: it rolls forward by itself. Pushing with a ground finger speeds it up more and the pavement slides down; the wheels clack over slab joints.
 - An ollie lifts the board (it grows and its shadow drops away); flicks during the air flip or spin it; it lands with a thud and the trick line shows the name and points.
 - Rolling into a cone: "Bail!", the cone falls over, the board slides off and comes back.
 - Landing on a rail lined up: "50-50" grind with sparks; it drops off the end.

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0
+- Put two fingers on the board and it rolls forward by itself, easing up to a steady speed. You no longer have to push to get going.
+- Pushing still works if you want to go faster: keep one finger on the board and swipe the other down the ground.
+- The first-time lesson now starts with "Put your pointer and middle fingers on the board to roll".
+
 ## 0.1.0
 - First version. The board lies on your phone as if the screen were the pavement, and the street rolls and turns underneath it.
 - Push: keep your pointer finger on the board and swipe your middle finger down the ground beside it. Hold the ground finger still to brake.

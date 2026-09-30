@@ -77,8 +77,10 @@ function inputFrame(dt){
     } else if(g.still>.3&&S.v>1) S.v=Math.max(0,S.v-90*dt);
   }
   for(const g of PT.values()) if(!g.g) g.mark=null;
+  // two fingers on the board: it rolls forward by itself, easing up to a steady cruise
+  if(S.st==='ground'&&(on.length>=2||on.some(p=>p.type==='mouse'))&&S.v<CRUISE) S.v=Math.min(CRUISE,S.v+(12+(CRUISE-S.v)*.9)*dt);
   if(KEY.brake&&S.st==='ground') S.v=Math.max(0,S.v-90*dt);
-  if(S.v>45) tutEvent('push');
+  if(S.v>45) tutEvent('roll');
   if(S.turned>.6) tutEvent('steer');
 }
 // forget fingers that ended up as marks on the ground
